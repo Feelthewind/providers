@@ -306,10 +306,10 @@ describe('BaseProvider: RPC', () => {
         });
 
         mockStream.push({
-          name: 'metamask-provider',
+          name: 'dekey-provider',
           data: {
             jsonrpc: '2.0',
-            method: 'metamask_chainChanged',
+            method: 'dekey_chainChanged',
             params: { chainId: '0x1', networkVersion: '0x1' },
           },
         });

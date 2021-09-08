@@ -1,5 +1,5 @@
 {
-  "name": "@metamask/providers",
+  "name": "dekey-providers",
   "version": "8.1.1",
   "description": "A JavaScript Ethereum provider that connects to the wallet over a stream.",
   "main": "dist/index.js",

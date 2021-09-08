@@ -114,7 +114,7 @@ export default class BaseProvider extends SafeEventEmitter {
   constructor(
     connectionStream: Duplex,
     {
-      jsonRpcStreamName = 'metamask-provider',
+      jsonRpcStreamName = 'dekey-provider',
       logger = console,
       maxEventListeners = 100,
     }: BaseProviderOptions = {},
@@ -186,11 +186,11 @@ export default class BaseProvider extends SafeEventEmitter {
     // handle JSON-RPC notifications
     this._jsonRpcConnection.events.on('notification', (payload) => {
       const { method, params } = payload;
-      if (method === 'metamask_accountsChanged') {
+      if (method === 'dekey_accountsChanged') {
         this._handleAccountsChanged(params);
-      } else if (method === 'metamask_unlockStateChanged') {
+      } else if (method === 'dekey_unlockStateChanged') {
         this._handleUnlockStateChanged(params);
-      } else if (method === 'metamask_chainChanged') {
+      } else if (method === 'dekey_chainChanged') {
         this._handleChainChanged(params);
       } else if (EMITTED_NOTIFICATIONS.includes(method)) {
         this.emit('message', {
@@ -275,7 +275,7 @@ export default class BaseProvider extends SafeEventEmitter {
     try {
       const { accounts, chainId, isUnlocked, networkVersion } =
         (await this.request({
-          method: 'metamask_getProviderState',
+          method: 'dekey_getProviderState',
         })) as {
           accounts: string[];
           chainId: string;
@@ -291,7 +291,7 @@ export default class BaseProvider extends SafeEventEmitter {
       this._handleAccountsChanged(accounts);
     } catch (error) {
       this._log.error(
-        'MetaMask: Failed to get initial state. Please report this bug.',
+        'Dekey: Failed to get initial state. Please report this bug.',
         error,
       );
     } finally {
@@ -426,7 +426,7 @@ export default class BaseProvider extends SafeEventEmitter {
       typeof networkVersion !== 'string'
     ) {
       this._log.error(
-        'MetaMask: Received invalid network parameters. Please report this bug.',
+        'Dekey: Received invalid network parameters. Please report this bug.',
         { chainId, networkVersion },
       );
       return;
@@ -463,7 +463,7 @@ export default class BaseProvider extends SafeEventEmitter {
 
     if (!Array.isArray(accounts)) {
       this._log.error(
-        'MetaMask: Received invalid accounts parameter. Please report this bug.',
+        'Dekey: Received invalid accounts parameter. Please report this bug.',
         accounts,
       );
       _accounts = [];
@@ -472,7 +472,7 @@ export default class BaseProvider extends SafeEventEmitter {
     for (const account of accounts) {
       if (typeof account !== 'string') {
         this._log.error(
-          'MetaMask: Received non-string account. Please report this bug.',
+          'Dekey: Received non-string account. Please report this bug.',
           accounts,
         );
         _accounts = [];
@@ -486,7 +486,7 @@ export default class BaseProvider extends SafeEventEmitter {
       // returns
       if (isEthAccounts && this._state.accounts !== null) {
         this._log.error(
-          `MetaMask: 'eth_accounts' unexpectedly updated accounts. Please report this bug.`,
+          `Dekey: 'eth_accounts' unexpectedly updated accounts. Please report this bug.`,
           _accounts,
         );
       }
@@ -523,7 +523,7 @@ export default class BaseProvider extends SafeEventEmitter {
   }: { accounts?: string[]; isUnlocked?: boolean } = {}) {
     if (typeof isUnlocked !== 'boolean') {
       this._log.error(
-        'MetaMask: Received invalid isUnlocked parameter. Please report this bug.',
+        'Dekey: Received invalid isUnlocked parameter. Please report this bug.',
       );
       return;
     }

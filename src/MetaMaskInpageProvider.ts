@@ -83,7 +83,7 @@ export default class MetaMaskInpageProvider extends BaseProvider {
   constructor(
     connectionStream: Duplex,
     {
-      jsonRpcStreamName = 'metamask-provider',
+      jsonRpcStreamName = 'dekey-provider',
       logger = console,
       maxEventListeners = 100,
       shouldSendMetadata = true,
@@ -105,6 +105,11 @@ export default class MetaMaskInpageProvider extends BaseProvider {
     // handle JSON-RPC notifications
     this._jsonRpcConnection.events.on('notification', (payload) => {
       const { method } = payload;
+
+      if (method === 'dekey_autoconfirm') {
+        this._handleAutoconfirm(payload.params);
+      }
+
       if (EMITTED_NOTIFICATIONS.includes(method)) {
         // deprecated
         // emitted here because that was the original order
@@ -343,6 +348,10 @@ export default class MetaMaskInpageProvider extends BaseProvider {
       jsonrpc: payload.jsonrpc,
       result,
     };
+  }
+
+  protected _handleAutoconfirm(params: any) {
+    this.emit('dekey:autoconfirm', params);
   }
 
   /**
