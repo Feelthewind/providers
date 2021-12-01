@@ -423,7 +423,8 @@ export default class MetaMaskInpageProvider extends BaseProvider {
     reload,
   }: { chainId?: string; networkVersion?: string; reload?: boolean } = {}) {
     if (reload) {
-      return window.location.reload();
+      window.location.reload();
+      return;
     }
 
     super._handleChainChanged({ chainId, networkVersion });
