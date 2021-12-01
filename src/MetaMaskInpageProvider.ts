@@ -214,7 +214,7 @@ export default class MetaMaskInpageProvider extends BaseProvider {
    */
   protected _warnOfDeprecation(eventName: string): void {
     if (this._sentWarnings?.events[eventName as WarningEventName] === false) {
-      this._log.warn(messages.warnings.events[eventName as WarningEventName]);
+      // this._log.warn(messages.warnings.events[eventName as WarningEventName]);
       this._sentWarnings.events[eventName as WarningEventName] = true;
     }
   }
@@ -420,7 +420,12 @@ export default class MetaMaskInpageProvider extends BaseProvider {
   protected _handleChainChanged({
     chainId,
     networkVersion,
-  }: { chainId?: string; networkVersion?: string } = {}) {
+    reload,
+  }: { chainId?: string; networkVersion?: string; reload?: boolean } = {}) {
+    if (reload) {
+      return window.location.reload();
+    }
+
     super._handleChainChanged({ chainId, networkVersion });
 
     if (

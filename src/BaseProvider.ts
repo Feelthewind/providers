@@ -422,8 +422,8 @@ export default class BaseProvider extends SafeEventEmitter {
       !chainId ||
       typeof chainId !== 'string' ||
       !chainId.startsWith('0x') ||
-      !networkVersion ||
-      typeof networkVersion !== 'string'
+      !networkVersion
+      // typeof networkVersion !== 'string'
     ) {
       this._log.error(
         'Dekey: Received invalid network parameters. Please report this bug.',
